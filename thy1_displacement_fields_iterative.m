@@ -242,10 +242,11 @@ thetas_expected = atan2(centers_y, centers_x);
 theta_mask = abs(thetas_expected - utheta_med);
 theta_mask(theta_mask>pi) = theta_mask(theta_mask>pi) - 2*pi; 
 theta_mask = theta_mask < 30/180*pi;
-%%
+%% Save the angles to the datastructure
 Thy1.utheta = utheta_med;
 Thy1.theta_mask = theta_mask;
-%%
+Thy1.thetas_expected = thetas_expected;
+%% Filter displacements based on direction and correlation and plot the displacements
 reference_frame = Thy1.reference_frame;
 green_image = zeros([size(reference_frame),3]);
 green_image(:,:,2) = reference_frame/max(reference_frame(:));
@@ -256,7 +257,7 @@ red_image(:,:,3) = red_frame/max(red_frame(:));
 
 red_thresh = prctile(red_frame(:), 95);
 red_mask = red_frame>red_thresh;
-%%
+
 dias = Thy1.dia_fit.data - Thy1.base_dia;
 dias_norm = dias - mean(dias);
 dias_norm = dias_norm/norm(dias_norm);
@@ -297,47 +298,47 @@ for n1 = 1:xboxes
        trusted_n2 = [trusted_n2 n2];
        
         fig = figure();
-    set(fig, 'Position', [1 1 2000 700])
-    subplot(1,3,1)
-    imshow(green_image*255)
-    hold on
-    h = imshow(255*red_image);
-    set(h, 'AlphaData',red_mask)
-    
-    x1 = (n1-1)*Thy1.step_size+(Thy1.grid_size+1)/2;
-    y1 = (n2-1)*Thy1.step_size+(Thy1.grid_size+1)/2;
-    dx = 50*cos(thetas_expected(n2,n1));
-    dy = 50*sin(thetas_expected(n2,n1));
-    quiver(x1,y1,dx,dy,'Color', 'y', 'LineWidth',3, 'MaxHeadSize',5)
-    
-    axis equal
-    set(gca, 'YDir', 'normal')
-    axis off
-    
-    t = (1:n_frames)/Fs;
-    t2 = (1:length(walking_bin))/Fs;
-    subplot(1,3,[2 3])
-    plot(t,dias/2, 'LineWidth',2)
-    hold on
-    plot(t,ur, 'k' , 'LineWidth',2)
-    xlabel('Time (s)')
-    
-    
-    ylabel('Radial displacement(\mum)')
-    yyaxis right
-    plot(t2, walking_bin, 'r^', 'MarkerSize', 10, 'MarkerFaceColor', 'r')
-    set(gca, 'YTick', [])
-    ylim([0 1.2])
-    legend( 'Vessel wall', 'Brain tissue', 'Binarized Running')
-    set(gca, 'FontSize', 16)
-    
-    saveas(fig, [animal_ID '/refined_displacements/' day_ID '_' file_num '_radial_displacement' num2str(length(trusted_n1)) '.png'])
-    saveas(fig, [animal_ID '/refined_displacements/' day_ID '_' file_num '_radial_displacement' num2str(length(trusted_n1)) '.pdf'])
-       
+        set(fig, 'Position', [1 1 2000 700])
+        subplot(1,3,1)
+        imshow(green_image*255)
+        hold on
+        h = imshow(255*red_image);
+        set(h, 'AlphaData',red_mask)
+        
+        x1 = (n1-1)*Thy1.step_size+(Thy1.grid_size+1)/2;
+        y1 = (n2-1)*Thy1.step_size+(Thy1.grid_size+1)/2;
+        dx = 50*cos(thetas_expected(n2,n1));
+        dy = 50*sin(thetas_expected(n2,n1));
+        quiver(x1,y1,dx,dy,'Color', 'y', 'LineWidth',3, 'MaxHeadSize',5)
+        
+        axis equal
+        set(gca, 'YDir', 'normal')
+        axis off
+        
+        t = (1:n_frames)/Fs;
+        t2 = (1:length(walking_bin))/Fs;
+        subplot(1,3,[2 3])
+        plot(t,dias/2, 'LineWidth',2)
+        hold on
+        plot(t,ur, 'k' , 'LineWidth',2)
+        xlabel('Time (s)')
+        
+        
+        ylabel('Radial displacement(\mum)')
+        yyaxis right
+        plot(t2, walking_bin, 'r^', 'MarkerSize', 10, 'MarkerFaceColor', 'r')
+        set(gca, 'YTick', [])
+        ylim([0 1.2])
+        legend( 'Vessel wall', 'Brain tissue', 'Binarized Running')
+        set(gca, 'FontSize', 16)
+        
+        saveas(fig, [animal_ID '/refined_displacements/' day_ID '_' file_num '_radial_displacement' num2str(length(trusted_n1)) '.png'])
+        saveas(fig, [animal_ID '/refined_displacements/' day_ID '_' file_num '_radial_displacement' num2str(length(trusted_n1)) '.pdf'])
+        
         
     end
 end
-%%
+%% Save the datastructure
 Thy1.corr_vals = corr_vals;
 Thy1.trusted_cols = trusted_n1;
 Thy1.trusted_rows = trusted_n2;
