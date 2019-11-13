@@ -1,8 +1,8 @@
-This code is used for datan analysis for the paper  
+This code is used for data analysis for the paper  
 "Functional hyperemia drives fluid exchange in the paravascular space" by Kedarasetti et. al. 
 https://www.biorxiv.org/content/10.1101/838813v1
 
-All the code in this repository works with Matlab® 2019 (Mathworks Inc.)
+All the code in this repository works with MatlabÂ® 2019 (Mathworks Inc.)
 
 To analyze the image files and calculate the displacements run the file "Thy1_analysis_summary.m"
 The information about the datasets should be stored in an excelsheet with the following columns:
