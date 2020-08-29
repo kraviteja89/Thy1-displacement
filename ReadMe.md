@@ -1,6 +1,6 @@
 This code is used for data analysis for the paper  
 "Functional hyperemia drives fluid exchange in the paravascular space" by Kedarasetti et. al. 
-https://www.biorxiv.org/content/10.1101/838813v1
+https://doi.org/10.1186/s12987-020-00214-3
 
 All the code in this repository works with Matlab® 2019 (Mathworks Inc.)
 
